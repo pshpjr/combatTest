@@ -14,7 +14,9 @@ int main()
 	sprite.scale({0.1, 0.1});
 
 	// Set the origin of the sprite to its center
-	sprite.setOrigin(sf::Vector2<float>{texture.getSize().x * 0.1f / 2.f, texture.getSize().y * 0.1f / 2.f});
+	sprite.setOrigin(sf::Vector2<float>{100, 100});
+	auto c = sf::CircleShape(1);
+	c.setPosition(sprite.getOrigin());
 
 	int degree = 0;
 
@@ -41,6 +43,7 @@ int main()
 		// Draw the sprite
 		window.draw(sprite);
 
+		window.draw(c);
 
 		// Update the window
 		window.display();
