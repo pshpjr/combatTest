@@ -14,7 +14,7 @@ int main()
 	sprite.scale({0.1, 0.1});
 
 	// Set the origin of the sprite to its center
-	sprite.setOrigin(texture.getSize().x * 0.1f / 2.f, texture.getSize().y * 0.1f / 2.f);
+	sprite.setOrigin({texture.getSize().x * 0.1f / 2.f, texture.getSize().y * 0.1f / 2.f});
 
 	int degree = 0;
 
