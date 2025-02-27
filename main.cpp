@@ -12,7 +12,7 @@ int main()
 
 	raylib::Window window(screenWidth, screenHeight, "raylib-cpp: display image");
 
-	raylib::Image image("resources/player.png", 100, 50, 0); // Load image data into CPU memory (RAM)
+	raylib::Image image("resources/player.png"); // Load image data into CPU memory (RAM)
 	raylib::Texture2D texture(image); // Create texture from image data
 
 	SetTargetFPS(60);
