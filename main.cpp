@@ -22,6 +22,10 @@ int main()
 	{
 		// Update
 		// TODO: Update your variables here
+		raylib::Image image2 = texture.GetTextureData();
+		image2.ColorTint(RED);
+		texture.Unload();
+		texture = raylib::Texture2D(image2);
 
 		// Draw
 		BeginDrawing();
