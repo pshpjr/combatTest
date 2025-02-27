@@ -37,7 +37,8 @@ int main()
 		//location.y += 1;
 		//location.x += 1;
 		rotation++;
-		texture.Draw(location, rotation,);
+		Vector2 origin = { (float)texture.GetWidth() / 2, (float)texture.GetHeight() / 2 };
+		DrawTextureEx(texture, location, rotation, Vector2{1,1}, WHITE);
 
 		EndDrawing();
 	}
