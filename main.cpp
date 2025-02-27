@@ -12,6 +12,10 @@ int main()
 	const sf::Texture texture("./resources/player.png");
 	sf::Sprite sprite(texture);
 	sprite.scale({0.1, 0.1});
+
+	// Set the origin of the sprite to its center
+	sprite.setOrigin(texture.getSize().x / 2.f, texture.getSize().y / 2.f);
+
 	int degree = 0;
 
 	sf::Vector2<float> location{150.0f, 150.0f};
