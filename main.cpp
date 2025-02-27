@@ -1,50 +1,38 @@
-﻿#pragma comment(lib,"raylibdll.lib")
-#pragma comment(lib,"Winmm.lib")
+﻿#pragma comment(lib,"Winmm.lib")
 
-#include <iostream>
-#include <raylib-cpp.hpp>
+#include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
 
 int main()
 {
-	// Initialization
-	const int screenWidth = 800;
-	const int screenHeight = 450;
+	// Create the main window
+	sf::RenderWindow window(sf::VideoMode({800, 600}), "SFML window");
 
-	raylib::Window window(screenWidth, screenHeight, "raylib-cpp: display image");
+	// Load a sprite to display
+	const sf::Texture texture("./resources/player.png");
+	sf::Sprite sprite(texture);
+	sprite.scale({0.1, 0.1});
 
-	raylib::Image image("resources/player.png"); // Load image data into CPU memory (RAM)
-	image.Resize(100, 50);
-	raylib::Texture2D texture(image); // Create texture from image data
-	Vector2 lb = {150, 150};
-	Vector2 ru = {250, 200};
-	SetTargetFPS(60);
-	float rotation = 0;
-	bool color = true;
-	// Main game loop
-	while (!window.ShouldClose()) // Detect window close button or ESC key
+
+	// Start the game loop
+	while (window.isOpen())
 	{
-		// Update
-		// TODO: Update your variables here
+		// Process events
+		while (const std::optional event = window.pollEvent())
+		{
+			// Close window: exit
+			if (event->is<sf::Event::Closed>())
+				window.close();
+		}
+
+		// Clear screen
+		window.clear();
+
+		// Draw the sprite
+		window.draw(sprite);
 
 
-		// Draw
-		BeginDrawing();
-
-		window.ClearBackground(RAYWHITE);
-
-		DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
-		//texture.Draw(location.x, location.y, WHITE);
-		//location.y += 1;
-		//location.x += 1;
-		rotation++;
-		Vector2 origin = { (float)texture.GetWidth() / 2, (float)texture.GetHeight() / 2 };
-		DrawTextureEx(texture, location, rotation, Vector2{1,1}, WHITE);
-
-		EndDrawing();
+		// Update the window
+		window.display();
 	}
-
-	// De-Initialization
-	texture.Unload(); // Texture unloading
-
-	return 0;
 }
