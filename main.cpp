@@ -29,7 +29,11 @@ int main()
 		ClearBackground(RAYWHITE);
 
 		DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
-		texture.Draw(10, 10, WHITE);
+		// texture.Draw(10, 10, WHITE); // Original draw call
+		Vector2 origin{ (float)texture.GetWidth() / 2, (float)texture.GetHeight() / 2 };
+		Rectangle sourceRec{ 0.0f, 0.0f, (float)texture.GetWidth(), (float)texture.GetHeight() };
+		Vector2 position{ 100, 100 };
+		DrawTexturePro(texture, sourceRec, Rectangle{ position.x, position.y, texture.GetWidth() * 2, texture.GetHeight() * 2 }, Vector2{ (float)texture.GetWidth(), (float)texture.GetHeight() }, 45.0f, WHITE);
 
 		EndDrawing();
 	}
