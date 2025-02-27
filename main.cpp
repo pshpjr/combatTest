@@ -12,25 +12,32 @@ int main()
 
 	raylib::Window window(screenWidth, screenHeight, "raylib-cpp: display image");
 
-	raylib::Image image("resources/player.png", 0, 0, UNCOMPRESSED_R8G8B8A8); // Load image data into CPU memory (RAM)
+	raylib::Image image("resources/player.png"); // Load image data into CPU memory (RAM)
+	image.Resize(100, 50);
 	raylib::Texture2D texture(image); // Create texture from image data
-
+	Vector2 lb = {150, 150};
+	Vector2 ru = {250, 200};
 	SetTargetFPS(60);
-
+	float rotation = 0;
+	bool color = true;
 	// Main game loop
 	while (!window.ShouldClose()) // Detect window close button or ESC key
 	{
 		// Update
 		// TODO: Update your variables here
 
+
 		// Draw
 		BeginDrawing();
 
-		ClearBackground(RAYWHITE);
+		window.ClearBackground(RAYWHITE);
 
 		DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
-		texture.Draw(10, 10, WHITE);
-
+		//texture.Draw(location.x, location.y, WHITE);
+		//location.y += 1;
+		//location.x += 1;
+		rotation++;
+		texture.Draw(location, rotation,);
 
 		EndDrawing();
 	}
