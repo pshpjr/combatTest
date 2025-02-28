@@ -2,6 +2,7 @@
 
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
+#include <cmath>
 
 int main()
 {
@@ -41,7 +42,15 @@ int main()
 					continue;
 				}
 
-				sprite.setPosition(sf::Vector2f(value->position.x, value->position.y));
+				sf::Vector2f clickPosition(value->position.x, value->position.y);
+
+				// Calculate the angle between the sprite and the click position
+				sf::Vector2f spritePosition = sprite.getPosition();
+				float dx = clickPosition.x - spritePosition.x;
+				float dy = clickPosition.y - spritePosition.y;
+				float angle = std::atan2(dy, dx) * 180 / M_PI;
+
+				sprite.setRotation(angle);
 			}
 		}
 
