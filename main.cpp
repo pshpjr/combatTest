@@ -7,7 +7,6 @@
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode({800, 600}), "SFML window");
-	window.setFramerateLimit(60);
 
 	sf::Texture texture;
 	if (!texture.loadFromFile("./resources/player.png"))
@@ -48,9 +47,9 @@ int main()
 				sf::Vector2f spritePosition = sprite.getPosition();
 				float dx = clickPosition.x - spritePosition.x;
 				float dy = clickPosition.y - spritePosition.y;
-				float angle = std::atan2(dy, dx) * 180 / M_PI;
+				float angle = std::atan2(dy, dx) * 180 / sf::priv::pi;
 
-				sprite.setRotation(angle);
+				sprite.setRotation(sf::degrees(angle));
 			}
 		}
 
