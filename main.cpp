@@ -47,9 +47,19 @@ int main()
 				sf::Vector2f spritePosition = sprite.getPosition();
 				float dx = clickPosition.x - spritePosition.x;
 				float dy = clickPosition.y - spritePosition.y;
-				float angle = std::atan2(dy, dx) * 180 / sf::priv::pi;
+				float angle = std::atan2(dy, dx) * 180 / M_PI;
 
-				sprite.setRotation(sf::degrees(angle));
+				// 부드러운 회전을 위해 현재 각도와 목표 각도 사이를 보간
+				float currentAngle = sprite.getRotation();
+				float rotationSpeed = 5.0f; // 회전 속도
+				float deltaAngle = angle - currentAngle;
+
+				// 가장 짧은 회전 방향을 결정
+				if (deltaAngle > 180.0f) deltaAngle -= 360.0f;
+				if (deltaAngle <= -180.0f) deltaAngle += 360.0f;
+
+				float newAngle = currentAngle + deltaAngle * rotationSpeed * 0.1f; // 0.1f는 프레임 간 시간 간격을 조절하기 위한 값
+				sprite.setRotation(newAngle);
 			}
 		}
 
