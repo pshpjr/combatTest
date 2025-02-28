@@ -5,48 +5,56 @@
 
 int main()
 {
-	// Create the main window
 	sf::RenderWindow window(sf::VideoMode({800, 600}), "SFML window");
 	window.setFramerateLimit(60);
-	// Load a sprite to display
-	const sf::Texture texture("./resources/player.png");
-	sf::Sprite sprite(texture);
-	sprite.scale({0.1, 0.1});
 
-	// Set the origin of the sprite to its center
-	sprite.setOrigin(sf::Vector2<float>{100, 100});
-	
-	sf::CircleShape origin_point(5.f);
-	origin_point.setFillColor(sf::Color::Red);
-	origin_point.setPosition(sprite.getPosition() - sprite.getOrigin());
+	sf::Texture texture;
+	if (!texture.loadFromFile("./resources/player.png"))
+	{
+		return -1;
+	}
+
+	sf::Sprite sprite(texture);
+	sprite.scale({0.1f, 0.1f});
+
+	// 텍스처 크기의 절반을 origin으로 설정
+	auto textureSize = static_cast<sf::Vector2f>(texture.getSize());
+	sprite.setOrigin({textureSize.x / 2.0f, textureSize.y / 2.0f});
+
 
 	int degree = 0;
+	sf::Vector2f location{150.0f, 150.0f};
+	sprite.setPosition(location);
 
-	sf::Vector2<float> location{150.0f, 150.0f};
 
-	// Start the game loop
 	while (window.isOpen())
 	{
-		// Process events
 		while (const std::optional event = window.pollEvent())
 		{
-			// Close window: exit
 			if (event->is<sf::Event::Closed>())
 				window.close();
+			if (event->is<sf::Event::MouseButtonPressed>())
+			{
+				auto value = event->getIf<sf::Event::MouseButtonPressed>();
+				if (value->button != sf::Mouse::Button::Left)
+				{
+					continue;
+				}
+
+				sprite.setPosition(sf::Vector2f(value->position.x, value->position.y));
+			}
 		}
-		sprite.setRotation(sf::degrees(degree));
-		degree++;
-		//location += {1, 1};
-		sprite.setPosition(location);
 
-		// Clear screen
+		//sprite.setRotation(sf::degrees(degree));
+		//degree++;
+		//sprite.setPosition(location);
+		// 주석 처리: origin_point.setPosition(location); 
+		// -> 더 이상 매 프레임마다 위치를 업데이트하지 않음
+
 		window.clear(sf::Color::White);
-
-		// Draw the sprite
 		window.draw(sprite);
-		window.draw(origin_point);
-
-		// Update the window
 		window.display();
 	}
+
+	return 0;
 }
