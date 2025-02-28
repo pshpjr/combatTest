@@ -47,7 +47,7 @@ int main()
 				sf::Vector2f spritePosition = sprite.getPosition();
 				float dx = clickPosition.x - spritePosition.x;
 				float dy = clickPosition.y - spritePosition.y;
-				float angle = std::atan2(dy, dx) * 180 / M_PI;
+				sf::Angle angle = sf::degrees(std::atan2(dy, dx) * 180 / sf::priv::pi);
 
 				sprite.setRotation(angle);
 			}

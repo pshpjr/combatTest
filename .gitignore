@@ -1,0 +1,6 @@
+.aider*
+.env
+/x64
+/combatTest/x64/Debug
+/.vs/combatTest
+/.idea
