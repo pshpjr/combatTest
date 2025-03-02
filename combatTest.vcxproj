@@ -136,16 +136,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Event.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.hpp" />
+    <ClInclude Include="Define.h" />
+    <ClInclude Include="Duration.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="EventTypes.h" />
-    <ClInclude Include="GameManager.hpp" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameObject.hpp" />
     <ClInclude Include="InputComponent.hpp" />
     <ClInclude Include="RenderComponent.hpp" />
+    <ClInclude Include="Time.h" />
     <ClInclude Include="TransformComponent.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

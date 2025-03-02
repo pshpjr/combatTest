@@ -1,22 +1,29 @@
 #pragma once
 #include <functional>
+#include <iostream>
 #include <memory>
 #include <unordered_map>
 #include <typeindex>
 
-#include "EventTypes.h" // CallbackID 정의가 포함된 헤더 가정
+#include "EventTypes.h"
 
-// 이벤트 시스템을 위한 간단하고 직관적인 구현
+//템플릿 디버깅 위한 함수
+template <typename... Ts>
+void PrintArgs()
+{
+	((std::cout << typeid(Ts).name() << ", "), ...);
+	std::cout << "\n";
+}
+
 namespace EventSystem
 {
-	// 기본 이벤트 클래스: 가변 인자 템플릿을 사용한 콜백 관리
 	template <typename... Args>
 	class Event
 	{
 	public:
 		using Callback = std::function<void(Args...)>;
 
-		// 새 콜백을 등록하고 고유 TypeID 반환
+		// 새 콜백을 등록하고 고유 CallbackID 반환
 		CallbackID Subscribe(Callback callback)
 		{
 			CallbackID id = GenerateCallbackId();
@@ -29,6 +36,7 @@ namespace EventSystem
 		{
 			m_callbacks.erase(id);
 		}
+
 
 		// 모든 콜백을 호출하여 이벤트 발생
 		template <typename... FArgs>
@@ -47,11 +55,15 @@ namespace EventSystem
 			return m_next_callback_id++;
 		}
 
-		std::unordered_map<CallbackID, Callback> m_callbacks; // 콜백 저장소
-		CallbackID m_next_callback_id = 1; // TypeID 생성용 카운터
+		std::unordered_map<CallbackID, Callback> m_callbacks;
+		CallbackID m_next_callback_id = 1;
 	};
 
 
+	/**
+	 * \brief 유효한지 bool 체크 가능. 무효인 경우 Notify, Subscribe 작동 안 함.
+	 * \note 내부에서 사용하는 이벤트 포인터 노출시키기 싫었음
+	 */
 	template <typename... Args>
 	class EventHandle
 	{
@@ -60,13 +72,14 @@ namespace EventSystem
 		{
 		}
 
-		// 콜백 등록
+		/**
+		 * \return 해당 콜백의 ID. 구독 해제시 사용. 무효 핸들이면 InvalidCallbackID 리턴
+		 */
 		CallbackID Subscribe(typename Event<Args...>::Callback callback)
 		{
 			return m_event ? m_event->Subscribe(std::move(callback)) : InvalidCallbackID;
 		}
 
-		// 콜백 해지
 		void Unsubscribe(CallbackID id)
 		{
 			if (m_event)
@@ -75,7 +88,6 @@ namespace EventSystem
 			}
 		}
 
-		// 이벤트 발생
 		void Notify(Args... args) const
 		{
 			if (m_event)
@@ -84,17 +96,21 @@ namespace EventSystem
 			}
 		}
 
-		// 유효성 체크
 		explicit operator bool() const
 		{
 			return m_event != nullptr;
 		}
 
 	private:
-		Event<Args...>* m_event; // 관리 대상 이벤트
+		Event<Args...>* m_event;
 	};
 
-	// 키 기반 이벤트 관리자
+
+	/**
+	 * \brief 키 값에 따라 연결된 이벤트를 트리거하는 이벤트 매니저
+	 * \tparam Key 이벤트 구별할 키 타입
+	 * \throws AccessViolation Triger 함수 인자 개수가 안 맞으면 런타임에 invoke 내부에서 에러 발생. 
+	 */
 	template <typename Key>
 	class EventManager
 	{
@@ -109,6 +125,8 @@ namespace EventSystem
 		template <typename... Args>
 		struct TypedEvent : EventBase
 		{
+			static constexpr std::size_t ArgCount = sizeof...(Args);
+
 			Event<Args...> event;
 
 			[[nodiscard]] std::type_index GetTypeIndex() const override
@@ -121,7 +139,12 @@ namespace EventSystem
 		EventManager() = default;
 		~EventManager() = default;
 
-		// 기존 이벤트 핸들 가져오기 (없으면 무효 핸들 반환)
+
+		/**
+		 * \brief 키에 등록된 이벤트를 들고 옴. 이벤트가 없을 경우 무효 핸들 리턴. 
+		 * \param key 해당 이벤트가 등록된 키
+		 * \return 이밴트의 래퍼 
+		 */
 		template <typename... Args>
 		EventHandle<Args...> GetEvent(const Key& key)
 		{
@@ -134,7 +157,6 @@ namespace EventSystem
 			return EventHandle<Args...>(&typed_event->event);
 		}
 
-		// 이벤트가 없으면 생성 후 핸들 반환
 		template <typename... Args>
 		EventHandle<Args...> GetOrCreateEvent(const Key& key)
 		{
@@ -149,7 +171,6 @@ namespace EventSystem
 			return handle;
 		}
 
-		// 지정된 키의 이벤트를 발생
 		template <typename... Args>
 		void Notify(const Key& key, Args&&... args)
 		{
@@ -160,6 +181,6 @@ namespace EventSystem
 		}
 
 	private:
-		std::unordered_map<Key, std::unique_ptr<EventBase>> m_events; // 이벤트 저장소
+		std::unordered_map<Key, std::unique_ptr<EventBase>> m_events;
 	};
 } // namespace EventSystem

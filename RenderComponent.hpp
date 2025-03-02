@@ -2,7 +2,6 @@
 #include "Component.hpp"
 #include "TransformComponent.hpp"
 #include <SFML/Graphics.hpp>
-#include <memory>
 
 class RenderComponent : public Component
 {
@@ -10,7 +9,7 @@ public:
 	RenderComponent(const std::string& texturePath): m_Texture(texturePath), m_Sprite(m_Texture)
 	{
 		// Set origin to center of texture
-		auto textureSize = static_cast<sf::Vector2f>(m_Texture.getSize());
+		const auto textureSize = static_cast<sf::Vector2f>(m_Texture.getSize());
 		m_Sprite.setOrigin({textureSize.x / 2.0f, textureSize.y / 2.0f});
 	}
 
@@ -51,5 +50,6 @@ public:
 private:
 	sf::Texture m_Texture;
 	sf::Sprite m_Sprite;
-	std::shared_ptr<TransformComponent> m_Transform;
+	TransformComponent* m_Transform;
+	TYPEID_DEFINE("Render")
 };

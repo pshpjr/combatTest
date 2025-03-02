@@ -1,58 +1,72 @@
 #pragma once
 #include <vector>
 #include <memory>
-#include <string>
-#include <algorithm>
 #include <typeindex>
-#include <unordered_map>
 #include "Component.hpp"
+#include "Define.h"
 
-class GameObject : public std::enable_shared_from_this<GameObject> {
+using GUID = uint64;
+
+class GameObject : public std::enable_shared_from_this<GameObject>
+{
 public:
-    GameObject(const std::string& name = "GameObject") : m_Name(name) {}
-    ~GameObject() = default;
+	GameObject(GUID id) : m_Name(id)
+	{
+	}
 
-    void Initialize() {
-        for (auto& component : m_Components) {
-            component->Initialize();
-        }
-    }
+	~GameObject() = default;
 
-    void Update(float deltaTime) {
-        for (auto& component : m_Components) {
-            component->Update(deltaTime);
-        }
-    }
+	void Initialize()
+	{
+		for (const auto& component : m_Components)
+		{
+			component->Initialize();
+		}
+	}
 
-    template<typename T, typename... Args>
-    std::shared_ptr<T> AddComponent(Args&&... args) {
-        static_assert(std::is_base_of<Component, T>::value, "T must derive from Component");
-        
-        auto component = std::make_shared<T>(std::forward<Args>(args)...);
-        component->SetOwner(shared_from_this());
-        m_Components.push_back(component);
-        
-        return component;
-    }
+	void Update(float deltaTime)
+	{
+		for (const auto& component : m_Components)
+		{
+			component->Update(deltaTime);
+		}
+	}
 
-    template<typename T>
-    std::shared_ptr<T> GetComponent() {
-        static_assert(std::is_base_of<Component, T>::value, "T must derive from Component");
-        
-        for (auto& component : m_Components) {
-            auto casted = std::dynamic_pointer_cast<T>(component);
-            if (casted) {
-                return casted;
-            }
-        }
-        
-        return nullptr;
-    }
+	template <typename T, typename... Args>
+	T* AddComponent(Args&&... args)
+	{
+		static_assert(std::is_base_of_v<Component, T>, "T must derive from Component");
 
-    const std::string& GetName() const { return m_Name; }
-    void SetName(const std::string& name) { m_Name = name; }
+		auto component = std::make_unique<T>(std::forward<Args>(args)...);
+		component->SetOwner(this);
+		auto ret = component.get();
+
+		m_Components.push_back(std::move(component));
+		return ret;
+	}
+
+	template <typename T>
+	T* GetComponent()
+	{
+		static_assert(std::is_base_of_v<Component, T>, "T must derive from Component");
+
+		for (const auto& component : m_Components)
+		{
+			if (component->GetTypeID() == T::TypeID())
+			{
+				return static_cast<T*>(component.get());
+			}
+		}
+
+		return nullptr;
+	}
+
+	const GUID GetGUID() const
+	{
+		return m_Name;
+	}
 
 private:
-    std::string m_Name;
-    std::vector<std::shared_ptr<Component>> m_Components;
+	GUID m_Name;
+	std::vector<std::unique_ptr<Component>> m_Components;
 };

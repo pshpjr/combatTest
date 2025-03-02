@@ -1,0 +1,47 @@
+# ReSharper C++ Naming Conventions
+root = true
+
+[*.{cpp,h,hpp}]
+# 모든 C++ 파일에 적용
+
+# 기본 네이밍 스타일 설정
+resharper_cpp_case_rules = lowerCamelCase
+resharper_cpp_type_name_style = PascalCase
+resharper_cpp_enum_name_style = PascalCase
+
+# 클래스/구조체
+resharper_cpp_class_name_style = PascalCase
+resharper_cpp_struct_name_style = PascalCase
+
+# 함수
+resharper_cpp_function_name_style = lowerCamelCase
+resharper_cpp_method_name_style = lowerCamelCase
+
+# 변수 (Public)
+resharper_cpp_public_instance_fields_style = lowerCamelCase
+resharper_cpp_public_static_fields_style = lowerCamelCase
+
+# 변수 (Private)
+resharper_cpp_private_instance_fields_prefix = m_
+resharper_cpp_private_instance_fields_style = lowerCamelCase
+resharper_cpp_private_static_fields_prefix = m_
+resharper_cpp_private_static_fields_style = lowerCamelCase
+
+# 변수 (Protected)
+resharper_cpp_protected_instance_fields_prefix = p_
+resharper_cpp_protected_instance_fields_style = lowerCamelCase
+resharper_cpp_protected_static_fields_prefix = p_
+resharper_cpp_protected_static_fields_style = lowerCamelCase
+
+# 상수
+resharper_cpp_const_name_style = UPPER_CASE_WITH_UNDERSCORES
+resharper_cpp_static_const_name_style = UPPER_CASE_WITH_UNDERSCORES
+
+# 네임스페이스
+resharper_cpp_namespace_name_style = lower_case
+
+# 매크로
+resharper_cpp_macro_name_style = UPPER_CASE_WITH_UNDERSCORES
+
+# 코드 검사 활성화
+resharper_enforce_naming_convention = true

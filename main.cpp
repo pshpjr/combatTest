@@ -1,8 +1,7 @@
 #pragma comment(lib,"Winmm.lib")
 
 #include <SFML/Audio.hpp>
-#include <SFML/Graphics.hpp>
-#include "GameManager.hpp"
+#include "GameManager.h"
 
 // 테스트용 이벤트 타입 정의
 enum class TestEventType

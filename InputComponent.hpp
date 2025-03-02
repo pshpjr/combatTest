@@ -3,7 +3,6 @@
 #include "TransformComponent.hpp"
 #include <SFML/Window/Event.hpp>
 #include <SFML/System/Vector2.hpp>
-#include <functional>
 #include <cmath>
 #include <iostream>
 
@@ -25,33 +24,21 @@ public:
 	{
 	}
 
-	void HandleEvent(const sf::Event& event)
+	void HandleEvent(psh::InputEvent type, sf::Event* event)
 	{
-		auto& e = *event.getIf<sf::Event::MouseButtonPressed>();
-		event.visit([this](auto&& value)
+		auto& e = *event->getIf<sf::Event::MouseButtonPressed>();
+		const sf::Vector2f clickPosition(e.position.x, e.position.y);
+		if (m_Transform)
 		{
-			using T = std::decay_t<decltype(value)>;
-			if constexpr (std::is_same_v<T, sf::Event::MouseButtonPressed>)
-			{
-				if (value.button != sf::Mouse::Button::Left)
-				{
-					return;
-				}
+			// Calculate the angle between the object and the click position
+			const sf::Vector2f objectPosition = m_Transform->GetPosition();
+			const float dx = clickPosition.x - objectPosition.x;
+			const float dy = clickPosition.y - objectPosition.y;
+			const sf::Angle angle = sf::degrees(std::atan2(dy, dx) * 180 / sf::priv::pi);
 
-				sf::Vector2f clickPosition(value.position.x, value.position.y);
-				if (m_Transform)
-				{
-					// Calculate the angle between the object and the click position
-					sf::Vector2f objectPosition = m_Transform->GetPosition();
-					float dx = clickPosition.x - objectPosition.x;
-					float dy = clickPosition.y - objectPosition.y;
-					sf::Angle angle = sf::degrees(std::atan2(dy, dx) * 180 / sf::priv::pi);
-
-					m_Transform->SetRotation(angle);
-				}
-				std::cout << "mouse pressed\n";
-			}
-		});
+			m_Transform->SetRotation(angle);
+		}
+		std::cout << "mouse pressed\n";
 		//if (event.type == sf::Event::MouseButtonPressed && 
 		//    event.mouseButton.button == sf::Mouse::Button::Left) {
 		//    
@@ -70,5 +57,6 @@ public:
 	}
 
 private:
-	std::shared_ptr<TransformComponent> m_Transform;
+	TransformComponent* m_Transform;
+	TYPEID_DEFINE("Input")
 };
