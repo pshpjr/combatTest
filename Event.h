@@ -2,7 +2,6 @@
 #include <functional>
 #include <memory>
 #include <unordered_map>
-#include <iostream>
 #include <typeindex>
 
 #include "EventTypes.h" // CallbackID 정의가 포함된 헤더 가정
@@ -17,39 +16,39 @@ namespace EventSystem
 	public:
 		using Callback = std::function<void(Args...)>;
 
-		// 새 콜백을 등록하고 고유 ID 반환
+		// 새 콜백을 등록하고 고유 TypeID 반환
 		CallbackID Subscribe(Callback callback)
 		{
 			CallbackID id = GenerateCallbackId();
-			callbacks_[id] = std::move(callback);
+			m_callbacks[id] = std::move(callback);
 			return id;
 		}
 
 		// 등록된 콜백 해지
 		void Unsubscribe(CallbackID id)
 		{
-			callbacks_.erase(id);
+			m_callbacks.erase(id);
 		}
 
 		// 모든 콜백을 호출하여 이벤트 발생
 		template <typename... FArgs>
 		void Notify(FArgs&&... args) const
 		{
-			for (const auto& [_, cb] : callbacks_)
+			for (const auto& [_, cb] : m_callbacks)
 			{
 				cb(std::forward<FArgs>(args)...);
 			}
 		}
 
 	private:
-		// 다음 사용 가능한 콜백 ID 생성
+		// 다음 사용 가능한 콜백 TypeID 생성
 		CallbackID GenerateCallbackId()
 		{
-			return next_callback_id_++;
+			return m_next_callback_id++;
 		}
 
-		std::unordered_map<CallbackID, Callback> callbacks_; // 콜백 저장소
-		CallbackID next_callback_id_ = 1; // ID 생성용 카운터
+		std::unordered_map<CallbackID, Callback> m_callbacks; // 콜백 저장소
+		CallbackID m_next_callback_id = 1; // TypeID 생성용 카운터
 	};
 
 
@@ -57,48 +56,53 @@ namespace EventSystem
 	class EventHandle
 	{
 	public:
-		explicit EventHandle(Event<Args...>* event) : event_(event)
+		explicit EventHandle(Event<Args...>* event) : m_event(event)
 		{
 		}
 
 		// 콜백 등록
 		CallbackID Subscribe(typename Event<Args...>::Callback callback)
 		{
-			return event_ ? event_->Subscribe(std::move(callback)) : InvalidCallbackID;
+			return m_event ? m_event->Subscribe(std::move(callback)) : InvalidCallbackID;
 		}
 
 		// 콜백 해지
 		void Unsubscribe(CallbackID id)
 		{
-			if (event_) event_->Unsubscribe(id);
+			if (m_event)
+			{
+				m_event->Unsubscribe(id);
+			}
 		}
 
 		// 이벤트 발생
 		void Notify(Args... args) const
 		{
-			if (event_) event_->Notify(std::forward<Args>(args)...);
+			if (m_event)
+			{
+				m_event->Notify(std::forward<Args>(args)...);
+			}
 		}
 
 		// 유효성 체크
 		explicit operator bool() const
 		{
-			return event_ != nullptr;
+			return m_event != nullptr;
 		}
 
 	private:
-		Event<Args...>* event_; // 관리 대상 이벤트
+		Event<Args...>* m_event; // 관리 대상 이벤트
 	};
 
 	// 키 기반 이벤트 관리자
 	template <typename Key>
 	class EventManager
 	{
-	private:
 		// 이벤트의 기본 인터페이스
 		struct EventBase
 		{
 			virtual ~EventBase() = default;
-			virtual std::type_index GetTypeIndex() const = 0;
+			[[nodiscard]] virtual std::type_index GetTypeIndex() const = 0;
 		};
 
 		// 특정 이벤트 타입을 위한 래퍼
@@ -107,7 +111,7 @@ namespace EventSystem
 		{
 			Event<Args...> event;
 
-			std::type_index GetTypeIndex() const override
+			[[nodiscard]] std::type_index GetTypeIndex() const override
 			{
 				return typeid(Event<Args...>);
 			}
@@ -121,8 +125,8 @@ namespace EventSystem
 		template <typename... Args>
 		EventHandle<Args...> GetEvent(const Key& key)
 		{
-			auto it = events_.find(key);
-			if (it == events_.end())
+			auto it = m_events.find(key);
+			if (it == m_events.end())
 			{
 				return EventHandle<Args...>(nullptr);
 			}
@@ -141,7 +145,7 @@ namespace EventSystem
 
 			auto event = std::make_unique<TypedEvent<Args...>>();
 			EventHandle<Args...> handle(&event->event);
-			events_[key] = std::move(event);
+			m_events[key] = std::move(event);
 			return handle;
 		}
 
@@ -156,6 +160,6 @@ namespace EventSystem
 		}
 
 	private:
-		std::unordered_map<Key, std::unique_ptr<EventBase>> events_; // 이벤트 저장소
+		std::unordered_map<Key, std::unique_ptr<EventBase>> m_events; // 이벤트 저장소
 	};
 } // namespace EventSystem
