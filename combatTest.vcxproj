@@ -135,7 +135,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Event.cpp" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Component.hpp" />
+    <ClInclude Include="Event.h" />
+    <ClInclude Include="EventTypes.h" />
+    <ClInclude Include="GameManager.hpp" />
+    <ClInclude Include="GameObject.hpp" />
+    <ClInclude Include="InputComponent.hpp" />
+    <ClInclude Include="RenderComponent.hpp" />
+    <ClInclude Include="TransformComponent.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
