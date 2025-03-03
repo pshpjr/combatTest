@@ -101,7 +101,20 @@ namespace psh::EventSystem
 	/**
 	 * \brief 키 값에 따라 연결된 이벤트를 트리거하는 이벤트 매니저
 	 * \tparam Key 이벤트 구별할 키 타입
-	 * \throws AccessViolation Triger 함수 인자 개수가 안 맞으면 런타임에 invoke 내부에서 에러 발생. 
+	 * \throws AccessViolation Triger 함수 인자 개수가 안 맞으면 런타임에 invoke 내부에서 에러 발생.
+	 * \code
+	 * // 사용 예시:
+	 * // 1. 이벤트 생성 또는 가져오기
+	 * auto mouseEvent = m_eventManager.GetOrCreateEvent<InputEvent, sf::Event*>(InputEvent::MousePressed);
+	 *
+	 * // 2. 이벤트 구독
+	 * mouseEvent.Subscribe([](InputEvent type, sf::Event* e) {
+	 *     input->HandleEvent(type, e); // 입력 처리
+	 * });
+	 *
+	 * // 3. 이벤트 트리거 (인자 개수에 유의)
+	 * m_eventManager.Notify(InputEvent::MousePressed, InputEvent::MousePressed, &event.value());
+	 * \endcode
 	 */
 	template <typename Key>
 	class EventManager
