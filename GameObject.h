@@ -51,6 +51,21 @@ namespace psh
 			return nullptr;
 		}
 
+		/**
+		 * \brief 반드시 있어야 하는 컴포넌트 얻어올 때
+		 * \throw runtime_error 
+		 */
+		template <typename T>
+		T* GetRequiredComponent()
+		{
+			T* ret = GetComponent<T>();
+			if (!ret)
+			{
+				throw std::runtime_error(std::format("requireComponent {} is missing", typeid(T).name()));
+			}
+			return ret;
+		}
+
 	private:
 		GUID m_name;
 		std::vector<std::unique_ptr<Component::Component>> m_components;

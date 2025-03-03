@@ -17,11 +17,7 @@ namespace psh::Component
 
 	void RenderComponent::Initialize()
 	{
-		m_Transform = GetOwner()->GetComponent<TransformComponent>();
-		if (!m_Transform)
-		{
-			throw std::runtime_error("RenderComponent requires a TransformComponent");
-		}
+		m_Transform = GetOwner()->GetRequiredComponent<TransformComponent>();
 	}
 
 	void RenderComponent::Update(MsTime deltaTime)

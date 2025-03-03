@@ -145,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />
+    <ClInclude Include="ComponentTypeRegistry.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Duration.h" />
     <ClInclude Include="Event.h" />
