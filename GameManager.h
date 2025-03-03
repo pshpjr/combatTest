@@ -11,10 +11,15 @@
 
 namespace psh
 {
-	enum class InputEvent : uint8
+	enum class GameEvent : uint8
 	{
-		KeyPressed,
-		MousePressed
+		InputEvent
+	};
+
+	enum class InputType : uint8
+	{
+		Keyboard,
+		Mouse
 	};
 
 	constexpr uint32 kMIN_UPDATE_TIME = 10;
@@ -34,7 +39,7 @@ namespace psh
 		uint32 GetServerTime() const;
 
 		template <typename... Args>
-		EventSystem::EventHandle<Args...> GetEvent(const InputEvent& key)
+		EventSystem::EventHandle<Args...> GetEvent(const GameEvent& key)
 		{
 			return m_eventManager.GetEvent<Args...>(key);
 		}
@@ -58,6 +63,6 @@ namespace psh
 		sf::RenderWindow m_window;
 		std::vector<std::shared_ptr<GameObject>> m_gameObjects;
 
-		EventSystem::EventManager<InputEvent> m_eventManager;
+		EventSystem::EventManager<GameEvent> m_eventManager;
 	};
 }

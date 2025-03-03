@@ -5,6 +5,7 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 
+#include "GameManager.h"
 #include "GameObject.h"
 #include "MovementComponent.h"
 #include "TransformComponent.h"
@@ -20,30 +21,24 @@ namespace psh::Component
 	{
 	}
 
-	void InputComponent::HandleEvent(InputEvent type, const sf::Event* event) const
+	void InputComponent::HandleEvent(InputType type, const sf::Event* event) const
 	{
-		if (auto e = event->getIf<sf::Event::MouseButtonPressed>())
+		switch (type)
 		{
-			const sf::Vector2f clickPosition(static_cast<float>(e->position.x), static_cast<float>(e->position.y));
-			m_movement->Move(clickPosition);
-			std::cout << "mouse pressed\n";
+		case InputType::Keyboard:
+			{
+				auto keyEvent = event->getIf<sf::Event::KeyPressed>();
+				auto mousePosition = sf::Mouse::getPosition();
+			}
+			break;
+		case InputType::Mouse:
+			{
+				auto e = event->getIf<sf::Event::MouseButtonPressed>();
+				const sf::Vector2f clickPosition(static_cast<float>(e->position.x), static_cast<float>(e->position.y));
+				m_movement->Move(clickPosition);
+				std::cout << "mouse pressed\n";
+			}
+			break;
 		}
-
-
-		//if (event.type == sf::Event::MouseButtonPressed && 
-		//    event.mouseButton.button == sf::Mouse::Button::Left) {
-		//    
-		//    sf::Vector2f clickPosition(event.mouseButton.x, event.mouseButton.y);
-		//    
-		//    if (m_Transform) {
-		//        // Calculate the angle between the object and the click position
-		//        sf::Vector2f objectPosition = m_Transform->GetPosition();
-		//        float dx = clickPosition.x - objectPosition.x;
-		//        float dy = clickPosition.y - objectPosition.y;
-		//        sf::Angle angle = sf::degrees(std::atan2(dy, dx) * 180 / sf::priv::pi);
-		//        
-		//        m_Transform->SetRotation(angle);
-		//    }
-		//}
 	}
 }

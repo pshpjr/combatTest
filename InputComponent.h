@@ -1,6 +1,7 @@
 #pragma once
 #include "Component.h"
 #include "Define.h"
+#include "GameManager.h"
 
 namespace psh::Component
 {
@@ -29,7 +30,7 @@ namespace psh
 
 			void Update(MsTime deltaTime) override;
 
-			void HandleEvent(InputEvent type, const sf::Event* event) const;
+			void HandleEvent(InputType type, const sf::Event* event) const;
 
 		private:
 			MovementComponent* m_movement;

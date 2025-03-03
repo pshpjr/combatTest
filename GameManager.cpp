@@ -28,8 +28,8 @@ namespace psh
 		auto input = player->AddComponent<InputComponent>();
 		player->Initialize();
 
-		auto mouseEvent = m_eventManager.GetOrCreateEvent<InputEvent, sf::Event*>(InputEvent::MousePressed);
-		mouseEvent.Subscribe([input](InputEvent type, sf::Event* e)
+		auto mouseEvent = m_eventManager.GetOrCreateEvent<InputType, sf::Event*>(GameEvent::InputEvent);
+		mouseEvent.Subscribe([input](InputType type, sf::Event* e)
 		{
 			input->HandleEvent(type, e);
 		});
@@ -62,11 +62,11 @@ namespace psh
 			}
 			else if (event->is<sf::Event::KeyPressed>())
 			{
-				m_eventManager.Notify(InputEvent::MousePressed, InputEvent::KeyPressed, &event.value());
+				m_eventManager.Notify(GameEvent::InputEvent, InputType::Keyboard, &event.value());
 			}
 			else if (event->is<sf::Event::MouseButtonPressed>())
 			{
-				m_eventManager.Notify(InputEvent::MousePressed, InputEvent::MousePressed, &event.value());
+				m_eventManager.Notify(GameEvent::InputEvent, InputType::Mouse, &event.value());
 			}
 		}
 	}

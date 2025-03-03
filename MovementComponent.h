@@ -48,7 +48,7 @@ namespace psh::Component
 
 		bool m_isMove = false;
 		sf::Vector2f m_destination{0, 0};
-		float m_moveSpeedMs = 1;
+		float m_moveSpeedMs = 0.1f;
 
 		COMPONENT_DEFINE("Movement")
 	};
