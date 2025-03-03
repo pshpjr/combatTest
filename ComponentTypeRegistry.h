@@ -53,7 +53,7 @@ namespace psh::Component
 
 
 	//GetTypeID는 런타임에 타입 얻어오는데 사용
-#define TYPEID_DEFINE(typename)\
+#define COMPONENT_DEFINE(typename)\
 private:\
 	inline static const ComponentTypeID m_typeID = ComponentTypeRegistry::RegisterComponentType(typename);\
 public:\
