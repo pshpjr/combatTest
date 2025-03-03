@@ -33,6 +33,6 @@ namespace psh::Component
 		sf::Texture m_Texture;
 		sf::Sprite m_Sprite;
 		TransformComponent* m_Transform;
-		TYPEID_DEFINE("Render")
+		COMPONENT_DEFINE("Render")
 	};
 }

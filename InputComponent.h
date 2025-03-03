@@ -2,6 +2,11 @@
 #include "Component.h"
 #include "Define.h"
 
+namespace psh::Component
+{
+	class MovementComponent;
+}
+
 namespace sf
 {
 	class Event;
@@ -27,8 +32,8 @@ namespace psh
 			void HandleEvent(InputEvent type, const sf::Event* event) const;
 
 		private:
-			TransformComponent* m_Transform;
-			TYPEID_DEFINE("Input")
+			MovementComponent* m_movement;
+			COMPONENT_DEFINE("Input")
 		};
 	}
 }

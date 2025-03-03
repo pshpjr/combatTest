@@ -2,6 +2,7 @@
 
 #include "InputComponent.h"
 #include "RenderComponent.h"
+#include "MovementComponent.h"
 #include "Time.h"
 #include "TransformComponent.h"
 
@@ -24,6 +25,7 @@ namespace psh
 		transform->SetScale(sf::Vector2f(0.1f, 0.1f));
 
 		player->AddComponent<RenderComponent>("./resources/player.png");
+		player->AddComponent<Component::MovementComponent>();
 		auto input = player->AddComponent<InputComponent>();
 		player->Initialize();
 
@@ -35,6 +37,55 @@ namespace psh
 
 
 		m_gameObjects.push_back(player);
+	}
+
+	void GameManager::Render()
+	{
+		m_window.clear(sf::Color::White);
+
+		for (const auto& gameObject : m_gameObjects)
+		{
+			if (const auto renderComponent = gameObject->GetComponent<RenderComponent>())
+			{
+				renderComponent->Draw(m_window);
+			}
+		}
+		m_window.display();
+	}
+
+	void GameManager::HandleInput()
+	{
+		while (auto event = m_window.pollEvent())
+		{
+			if (event->is<sf::Event::Closed>())
+			{
+				m_window.close();
+			}
+			else if (event->is<sf::Event::KeyPressed>())
+			{
+				m_eventManager.Notify(InputEvent::MousePressed, InputEvent::KeyPressed, &event.value());
+			}
+			else if (event->is<sf::Event::MouseButtonPressed>())
+			{
+				m_eventManager.Notify(InputEvent::MousePressed, InputEvent::MousePressed, &event.value());
+			}
+		}
+	}
+
+	constexpr MsTime FIXED_UPDATE_TIME = 20;
+	MsTime physicsUpdateRemain = 0;
+
+	void GameManager::Update(MsTime diff)
+	{
+		physicsUpdateRemain += diff;
+		while (physicsUpdateRemain >= FIXED_UPDATE_TIME)
+		{
+			for (const auto& gameObject : m_gameObjects)
+			{
+				gameObject->Update(FIXED_UPDATE_TIME);
+			}
+			physicsUpdateRemain -= FIXED_UPDATE_TIME;
+		}
 	}
 
 	void GameManager::Run()
@@ -56,40 +107,14 @@ namespace psh
 			}
 
 			// Process events
-			while (auto event = m_window.pollEvent())
-			{
-				if (event->is<sf::Event::Closed>())
-				{
-					m_window.close();
-				}
-				else if (event->is<sf::Event::KeyPressed>())
-				{
-					m_eventManager.Notify(InputEvent::MousePressed, InputEvent::KeyPressed, &event.value());
-				}
-				else if (event->is<sf::Event::MouseButtonPressed>())
-				{
-					m_eventManager.Notify(InputEvent::MousePressed, InputEvent::MousePressed, &event.value());
-				}
-			}
+			HandleInput();
 
 			// Update all game objects
-			for (const auto& gameObject : m_gameObjects)
-			{
-				gameObject->Update(diff);
-			}
+			Update(diff);
 
 			// Render
-			m_window.clear(sf::Color::White);
+			Render();
 
-			for (const auto& gameObject : m_gameObjects)
-			{
-				if (const auto renderComponent = gameObject->GetComponent<RenderComponent>())
-				{
-					renderComponent->Draw(m_window);
-				}
-			}
-
-			m_window.display();
 
 			m_prevServerTime = m_serverTime;
 		}

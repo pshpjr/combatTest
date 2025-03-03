@@ -25,6 +25,9 @@ namespace psh
 		GameManager();
 
 		void Initialize();
+		void Render();
+		void HandleInput();
+		void Update(MsTime diff);
 
 		void Run();
 

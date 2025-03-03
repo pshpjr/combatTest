@@ -40,6 +40,9 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MovementComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameManager.h">
@@ -79,6 +82,9 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="ComponentTypeRegistry.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
   </ItemGroup>
