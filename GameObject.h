@@ -1,0 +1,58 @@
+#pragma once
+#include <vector>
+#include <memory>
+#include "Component.h"
+#include "Define.h"
+#include "Time.h"
+
+using GUID = uint64;
+
+namespace psh
+{
+	class GameObject : public std::enable_shared_from_this<GameObject>
+	{
+	public:
+		explicit GameObject(GUID id);
+
+		~GameObject() = default;
+
+		void Initialize() const;
+
+		void Update(MsTime deltaTime) const;
+
+		GUID GetGUID() const;
+
+		template <typename T, typename... Args>
+		T* AddComponent(Args&&... args)
+		{
+			static_assert(std::is_base_of_v<Component::Component, T>, "T must derive from Component");
+
+			auto component = std::make_unique<T>(std::forward<Args>(args)...);
+			component->SetOwner(this);
+			auto ret = component.get();
+
+			m_components.push_back(std::move(component));
+			return ret;
+		}
+
+		template <typename T>
+		T* GetComponent()
+		{
+			static_assert(std::is_base_of_v<Component::Component, T>, "T must derive from Component");
+
+			for (const auto& component : m_components)
+			{
+				if (component->GetTypeID() == T::TypeID())
+				{
+					return static_cast<T*>(component.get());
+				}
+			}
+
+			return nullptr;
+		}
+
+	private:
+		GUID m_name;
+		std::vector<std::unique_ptr<Component::Component>> m_components;
+	};
+}

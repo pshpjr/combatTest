@@ -24,24 +24,36 @@
     <ClCompile Include="GameManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="InputComponent.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderComponent.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformComponent.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Component.hpp">
+    <ClInclude Include="Component.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="GameManager.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.hpp">
+    <ClInclude Include="GameObject.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
-    <ClInclude Include="InputComponent.hpp">
+    <ClInclude Include="InputComponent.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
-    <ClInclude Include="RenderComponent.hpp">
+    <ClInclude Include="RenderComponent.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
-    <ClInclude Include="TransformComponent.hpp">
+    <ClInclude Include="TransformComponent.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="Event.h">
@@ -57,6 +69,9 @@
       <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="Define.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

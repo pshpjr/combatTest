@@ -1,17 +1,16 @@
-#pragma once
-#include "Component.hpp"
-#include "TransformComponent.hpp"
-#include <SFML/Window/Event.hpp>
-#include <SFML/System/Vector2.hpp>
-#include <cmath>
+#include "InputComponent.h"
+
 #include <iostream>
+#include <stdexcept>
+#include <SFML/System/Vector2.hpp>
+#include <SFML/Window/Event.hpp>
 
-class InputComponent : public Component
+#include "GameObject.h"
+#include "TransformComponent.h"
+
+namespace psh::Component
 {
-public:
-	InputComponent() = default;
-
-	void Initialize() override
+	void InputComponent::Initialize()
 	{
 		m_Transform = GetOwner()->GetComponent<TransformComponent>();
 		if (!m_Transform)
@@ -20,11 +19,11 @@ public:
 		}
 	}
 
-	void Update(float deltaTime) override
+	void InputComponent::Update(MsTime deltaTime)
 	{
 	}
 
-	void HandleEvent(psh::InputEvent type, sf::Event* event)
+	void InputComponent::HandleEvent(InputEvent type, const sf::Event* event) const
 	{
 		auto& e = *event->getIf<sf::Event::MouseButtonPressed>();
 		const sf::Vector2f clickPosition(e.position.x, e.position.y);
@@ -55,8 +54,4 @@ public:
 		//    }
 		//}
 	}
-
-private:
-	TransformComponent* m_Transform;
-	TYPEID_DEFINE("Input")
-};
+}

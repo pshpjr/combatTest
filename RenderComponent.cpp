@@ -1,19 +1,21 @@
-#pragma once
-#include "Component.hpp"
-#include "TransformComponent.hpp"
-#include <SFML/Graphics.hpp>
+#include "RenderComponent.h"
 
-class RenderComponent : public Component
+#include <SFML/Graphics/RenderWindow.hpp>
+
+#include "GameObject.h"
+#include "TransformComponent.h"
+
+namespace psh::Component
 {
-public:
-	RenderComponent(const std::string& texturePath): m_Texture(texturePath), m_Sprite(m_Texture)
+	RenderComponent::RenderComponent(const std::string& texturePath): m_Texture(texturePath), m_Sprite(m_Texture),
+	                                                                  m_Transform(nullptr)
 	{
 		// Set origin to center of texture
 		const auto textureSize = static_cast<sf::Vector2f>(m_Texture.getSize());
 		m_Sprite.setOrigin({textureSize.x / 2.0f, textureSize.y / 2.0f});
 	}
 
-	void Initialize() override
+	void RenderComponent::Initialize()
 	{
 		m_Transform = GetOwner()->GetComponent<TransformComponent>();
 		if (!m_Transform)
@@ -22,7 +24,7 @@ public:
 		}
 	}
 
-	void Update(float deltaTime) override
+	void RenderComponent::Update(MsTime deltaTime)
 	{
 		if (m_Transform)
 		{
@@ -32,24 +34,18 @@ public:
 		}
 	}
 
-	void Draw(sf::RenderWindow& window)
+	void RenderComponent::Draw(sf::RenderWindow& window) const
 	{
 		window.draw(m_Sprite);
 	}
 
-	sf::Sprite& GetSprite()
+	sf::Sprite& RenderComponent::GetSprite()
 	{
 		return m_Sprite;
 	}
 
-	const sf::Sprite& GetSprite() const
+	const sf::Sprite& RenderComponent::GetSprite() const
 	{
 		return m_Sprite;
 	}
-
-private:
-	sf::Texture m_Texture;
-	sf::Sprite m_Sprite;
-	TransformComponent* m_Transform;
-	TYPEID_DEFINE("Render")
-};
+}

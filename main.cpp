@@ -20,7 +20,7 @@ struct TestData
 
 int main()
 {
-	GameManager gameManager;
+	psh::GameManager gameManager;
 	gameManager.Initialize();
 	gameManager.Run();
 

@@ -137,20 +137,25 @@
   <ItemGroup>
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="RenderComponent.cpp" />
+    <ClCompile Include="TransformComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Component.hpp" />
+    <ClInclude Include="Component.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Duration.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="EventTypes.h" />
     <ClInclude Include="GameManager.h" />
-    <ClInclude Include="GameObject.hpp" />
-    <ClInclude Include="InputComponent.hpp" />
-    <ClInclude Include="RenderComponent.hpp" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="InputComponent.h" />
+    <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="Time.h" />
-    <ClInclude Include="TransformComponent.hpp" />
+    <ClInclude Include="TransformComponent.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

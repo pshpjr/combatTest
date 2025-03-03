@@ -7,15 +7,7 @@
 
 #include "EventTypes.h"
 
-//템플릿 디버깅 위한 함수
-template <typename... Ts>
-void PrintArgs()
-{
-	((std::cout << typeid(Ts).name() << ", "), ...);
-	std::cout << "\n";
-}
-
-namespace EventSystem
+namespace psh::EventSystem
 {
 	template <typename... Args>
 	class Event
@@ -183,4 +175,4 @@ namespace EventSystem
 	private:
 		std::unordered_map<Key, std::unique_ptr<EventBase>> m_events;
 	};
-} // namespace EventSystem
+} // namespace psh::EventSystem

@@ -1,4 +1,6 @@
 #pragma once
+#include <iostream>
+
 namespace psh
 {
 	//템플릿 디버깅 위한 함수
