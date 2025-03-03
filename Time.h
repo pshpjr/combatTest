@@ -5,23 +5,32 @@
 using TimePoint = std::chrono::steady_clock::time_point;
 using SteadyClock = std::chrono::steady_clock;
 using Duration = std::chrono::duration<std::chrono::milliseconds>;
+using MsTime = uint32;
 
+
+/**
+ * \return 이 함수가 처음으로 호출된 시간
+ */
 inline TimePoint GetApplicationStartTime()
 {
 	static const TimePoint startTime = SteadyClock::now();
 	return startTime;
 }
 
-inline uint32 getMSTime()
+/**
+ * \brief 프로그램이 시작하고 흐른 시간 ms
+ * \return 
+ */
+inline MsTime getMSTime()
 {
 	using namespace std::chrono;
 
 	return static_cast<uint32>(duration_cast<milliseconds>(steady_clock::now() - GetApplicationStartTime()).count());
 }
 
-inline uint32 getMSTimeDiff(uint32 oldMSTime, uint32 newMSTime)
+inline MsTime getMSTimeDiff(MsTime oldMSTime, MsTime newMSTime)
 {
-	// getMSTime() have limited data range and this is case when it overflow in this tick
+	// 오버플로우 체크
 	if (oldMSTime > newMSTime)
 	{
 		return 0xFFFFFFFF - oldMSTime + newMSTime;
@@ -29,21 +38,24 @@ inline uint32 getMSTimeDiff(uint32 oldMSTime, uint32 newMSTime)
 	return newMSTime - oldMSTime;
 }
 
-inline uint32 getMSTimeDiff(uint32 oldMSTime, TimePoint newTime)
+inline MsTime getMSTimeDiff(MsTime oldMSTime, TimePoint newTime)
 {
 	using namespace std::chrono;
 
-	const uint32 newMSTime = static_cast<uint32>(duration_cast<milliseconds>(newTime - GetApplicationStartTime()).
+	const MsTime newMSTime = static_cast<MsTime>(duration_cast<milliseconds>(newTime - GetApplicationStartTime()).
 		count());
 	return getMSTimeDiff(oldMSTime, newMSTime);
 }
 
-inline uint32 GetMSTimeDiffToNow(uint32 oldMSTime)
+inline MsTime GetMSTimeDiffToNow(MsTime oldMSTime)
 {
 	return getMSTimeDiff(oldMSTime, getMSTime());
 }
 
-struct IntervalTimer
+/**
+ * \brief 주기적으로 발생하는 이벤트를 위한 타이머. reset해도 시간이 0이 되지 않음. 
+ */
+class IntervalTimer
 {
 	IntervalTimer()
 		: m_interval(0), m_current(0)
@@ -59,7 +71,7 @@ struct IntervalTimer
 		}
 	}
 
-	bool Passed()
+	bool Passed() const
 	{
 		return m_current >= m_interval;
 	}
@@ -92,11 +104,13 @@ struct IntervalTimer
 		return m_current;
 	}
 
-private:
 	time_t m_interval;
 	time_t m_current;
 };
 
+/**
+ * \brief 1회성 시간 만료를 확인하는 타이머
+ */
 struct TimeTracker
 {
 	TimeTracker(int32 expiry = 0) : m_expiryTime(expiry)
@@ -139,49 +153,4 @@ struct TimeTracker
 
 private:
 	Milliseconds m_expiryTime;
-};
-
-struct PeriodicTimer
-{
-	PeriodicTimer(int32 period, int32 start_time)
-		: m_period(period), m_expireTime(start_time)
-	{
-	}
-
-	bool Update(const uint32 diff)
-	{
-		if ((m_expireTime -= diff) > 0)
-		{
-			return false;
-		}
-
-		m_expireTime += m_period > static_cast<int32>(diff) ? m_period : diff;
-		return true;
-	}
-
-	void SetPeriodic(int32 period, int32 start_time)
-	{
-		m_expireTime = start_time;
-		m_period = period;
-	}
-
-	// Tracker interface
-	void TUpdate(int32 diff)
-	{
-		m_expireTime -= diff;
-	}
-
-	[[nodiscard]] bool TPassed() const
-	{
-		return m_expireTime <= 0;
-	}
-
-	void TReset(int32 diff, int32 period)
-	{
-		m_expireTime += period > diff ? period : diff;
-	}
-
-private:
-	int32 m_period;
-	int32 m_expireTime;
 };
