@@ -16,9 +16,9 @@ namespace psh
 
 		~GameObject() = default;
 
-		void Initialize() const;
+		void Initialize();
 
-		void Update(MsTime deltaTime) const;
+		void Update(MsTime deltaTime);
 
 		GUID GetGUID() const;
 
@@ -49,6 +49,12 @@ namespace psh
 			}
 
 			return nullptr;
+		}
+
+		template <typename T>
+		bool HasComponent() const
+		{
+			return GetComponent<T>() != nullptr;
 		}
 
 		/**

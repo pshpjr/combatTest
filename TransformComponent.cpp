@@ -53,4 +53,19 @@ namespace psh::Component
 		transform.scale(m_Scale);
 		return transform;
 	}
+
+	void TransformComponent::Move(const sf::Vector2f& offset)
+	{
+		m_Position += offset;
+	}
+
+	void TransformComponent::Rotate(sf::Angle angle)
+	{
+		m_Rotation += angle;
+	}
+
+	void TransformComponent::Scale(float factor)
+	{
+		m_Scale *= factor;
+	}
 }

@@ -39,13 +39,24 @@ namespace psh
 			return m_eventManager.GetEvent<Args...>(key);
 		}
 
+		void UpdateFrameStats(MsTime frameTime);
+
 	private:
+		// Frame rate tracking
+		float m_fps{0.f};
+		MsTime m_frameTimeAccumulator{0};
+		MsTime m_averageFrameTime{0};
+		MsTime m_minFrameTime{std::numeric_limits<MsTime>::max()};
+		MsTime m_maxFrameTime{0};
+		int m_frameCount{0};
+		uint32 m_nextUpdateTime{0};
+		static constexpr int FPS_UPDATE_INTERVAL = 1000;
+
 		uint32 m_serverTime{};
 		uint32 m_prevServerTime{};
 
 		sf::RenderWindow m_window;
 		std::vector<std::shared_ptr<GameObject>> m_gameObjects;
-		std::chrono::high_resolution_clock::time_point m_lastFrameTime;
 
 		EventSystem::EventManager<InputEvent> m_eventManager;
 	};

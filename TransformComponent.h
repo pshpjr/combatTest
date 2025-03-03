@@ -31,6 +31,12 @@ namespace psh::Component
 
 		[[nodiscard]] sf::Transform GetTransform() const;
 
+		void Move(const sf::Vector2f& offset);
+
+		void Rotate(sf::Angle angle);
+
+		void Scale(float factor);
+
 	private:
 		sf::Vector2f m_Position;
 		sf::Angle m_Rotation;

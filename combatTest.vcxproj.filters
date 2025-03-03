@@ -36,9 +36,6 @@
     <ClCompile Include="TransformComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="Event.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MovementComponent.cpp">
       <Filter>Component</Filter>

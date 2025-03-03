@@ -87,6 +87,26 @@ void psh::Component::MovementComponent::Stop()
 	m_isMove = false;
 }
 
+void psh::Component::MovementComponent::SetSpeed(float speed)
+{
+	m_moveSpeedMs = speed;
+}
+
+float psh::Component::MovementComponent::GetSpeed() const
+{
+	return m_moveSpeedMs;
+}
+
+bool psh::Component::MovementComponent::IsMoving() const
+{
+	return m_isMove;
+}
+
+sf::Vector2f psh::Component::MovementComponent::GetDestination() const
+{
+	return m_destination;
+}
+
 void psh::Component::MovementComponent::Initialize()
 {
 	m_transform = GetOwner()->GetRequiredComponent<TransformComponent>();

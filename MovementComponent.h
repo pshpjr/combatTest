@@ -35,12 +35,20 @@ namespace psh::Component
 		void Move(sf::Vector2f destination);
 		void Stop();
 
+		void SetSpeed(float speed);
+
+		float GetSpeed() const;
+
+		bool IsMoving() const;
+
+		sf::Vector2f GetDestination() const;
+
 	private:
 		TransformComponent* m_transform = nullptr;
 
 		bool m_isMove = false;
 		sf::Vector2f m_destination{0, 0};
-		int m_moveSpeedMs = 1;
+		float m_moveSpeedMs = 1;
 
 		COMPONENT_DEFINE("Movement")
 	};

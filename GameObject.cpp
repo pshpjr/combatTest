@@ -6,17 +6,17 @@ namespace psh
 	{
 	}
 
-	void GameObject::Initialize() const
+	void GameObject::Initialize()
 	{
-		for (const auto& component : m_components)
+		for (auto& component : m_components)
 		{
 			component->Initialize();
 		}
 	}
 
-	void GameObject::Update(MsTime deltaTime) const
+	void GameObject::Update(MsTime deltaTime)
 	{
-		for (const auto& component : m_components)
+		for (auto& component : m_components)
 		{
 			component->Update(deltaTime);
 		}
