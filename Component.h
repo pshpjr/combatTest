@@ -6,7 +6,7 @@ namespace psh
 {
 	class GameObject;
 
-	namespace Component
+	namespace component
 	{
 		using ComponentTypeID = size_t;
 

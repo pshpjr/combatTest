@@ -1,71 +1,128 @@
 #include "TransformComponent.h"
 
-namespace psh::Component
+#include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/Texture.hpp>
+
+#include "CollisionComponent.h"
+#include "GameObject.h"
+
+namespace psh::component
 {
-	TransformComponent::TransformComponent(const sf::Vector2f& position, sf::Angle rotation, const sf::Vector2f& scale):
-		m_Position(position), m_Rotation(rotation), m_Scale(scale)
+	TransformComponent::TransformComponent(const sf::Vector2f& position, sf::Angle rotation, bool isCircle): m_isCircle(
+		isCircle)
 	{
+		if (isCircle)
+		{
+			m_shape = new sf::CircleShape;
+		}
+		else
+		{
+			m_shape = new sf::RectangleShape;
+		}
 	}
 
 	void TransformComponent::Initialize()
 	{
+		m_collision = GetOwner()->GetComponent<CollisionComponent>();
 	}
 
 	void TransformComponent::Update(MsTime deltaTime)
 	{
 	}
 
-	const sf::Vector2f& TransformComponent::GetPosition() const
+	sf::Vector2f TransformComponent::GetPosition() const
 	{
-		return m_Position;
+		return m_shape->getPosition();
 	}
 
-	void TransformComponent::SetPosition(const sf::Vector2f& position)
+	void TransformComponent::SetPosition(sf::Vector2f position)
 	{
-		m_Position = position;
+		m_shape->setPosition(position);
+		if (m_collision)
+		{
+			m_collision->SetPosition(position);
+		}
 	}
 
 	sf::Angle TransformComponent::GetRotation() const
 	{
-		return m_Rotation;
+		return m_shape->getRotation();
 	}
 
 	void TransformComponent::SetRotation(sf::Angle rotation)
 	{
-		m_Rotation = rotation;
+		m_shape->setRotation(rotation);
+		if (m_collision)
+		{
+			m_collision->SetRotation(rotation);
+		}
 	}
 
-	const sf::Vector2f& TransformComponent::GetScale() const
+	sf::Vector2f TransformComponent::GetSize() const
 	{
-		return m_Scale;
+		return m_size;
 	}
 
-	void TransformComponent::SetScale(const sf::Vector2f& scale)
+	void TransformComponent::SetSize(sf::Vector2f size)
 	{
-		m_Scale = scale;
+		m_size = size;
+
+		if (m_isCircle)
+		{
+			auto shape = static_cast<sf::CircleShape*>(m_shape);
+			shape->setRadius(size.x);
+			shape->setOrigin({size.x, size.y});
+		}
+		else
+		{
+			static_cast<sf::RectangleShape*>(m_shape)->setSize(size);
+			m_shape->setOrigin({size.x / 2, size.y / 2});
+		}
+		auto texture = m_shape->getTexture();
+		if (m_collision)
+		{
+			m_collision->SetSize(size);
+		}
 	}
 
 	sf::Transform TransformComponent::GetTransform() const
 	{
-		sf::Transform transform;
-		transform.translate(m_Position);
-		transform.rotate(m_Rotation);
-		transform.scale(m_Scale);
-		return transform;
+		return m_shape->getTransform();
 	}
 
-	void TransformComponent::Move(const sf::Vector2f& offset)
+	bool TransformComponent::isCircle() const
 	{
-		m_Position += offset;
+		return m_isCircle;
+	}
+
+	sf::Shape* TransformComponent::GetShape()
+	{
+		return m_shape;
+	}
+
+	void TransformComponent::Move(sf::Vector2f offset)
+	{
+		m_shape->move(offset);
+
+		if (m_collision)
+		{
+			m_collision->SetPosition(GetPosition() + offset);
+		}
 	}
 
 	void TransformComponent::Rotate(sf::Angle angle)
 	{
-		m_Rotation += angle;
+		m_shape->rotate(angle);
+
+		if (m_collision)
+		{
+			m_collision->SetRotation(GetRotation() + angle);
+		}
 	}
 
-	void TransformComponent::Scale(float factor)
+	void TransformComponent::Scale(sf::Vector2f factor)
 	{
-		m_Scale *= factor;
+		m_shape->scale(factor);
 	}
 }

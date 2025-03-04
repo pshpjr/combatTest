@@ -16,13 +16,13 @@ Description:
 
 //서드파티 헤더
 
-namespace psh::Component
+namespace psh::component
 {
 	class TransformComponent;
 }
 
 //프로젝트 헤더
-namespace psh::Component
+namespace psh::component
 {
 	class MovementComponent : public Component
 	{

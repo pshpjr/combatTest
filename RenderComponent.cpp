@@ -1,47 +1,37 @@
 #include "RenderComponent.h"
 
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Shape.hpp>
 
 #include "GameObject.h"
 #include "TransformComponent.h"
+#include "EffectComponent.h"
 
-namespace psh::Component
+namespace psh::component
 {
-	RenderComponent::RenderComponent(const std::string& texturePath): m_Texture(texturePath), m_Sprite(m_Texture),
-	                                                                  m_Transform(nullptr)
+	RenderComponent::RenderComponent(const std::string& texturePath): m_texture(texturePath)
 	{
 		// Set origin to center of texture
-		const auto textureSize = static_cast<sf::Vector2f>(m_Texture.getSize());
-		m_Sprite.setOrigin({textureSize.x / 2.0f, textureSize.y / 2.0f});
+		const auto textureSize = static_cast<sf::Vector2f>(m_texture.getSize());
 	}
 
 	void RenderComponent::Initialize()
 	{
-		m_Transform = GetOwner()->GetRequiredComponent<TransformComponent>();
+		m_transform = GetOwner()->GetRequiredComponent<TransformComponent>();
+		m_effect = GetOwner()->GetComponent<EffectComponent>();
+		m_transform->GetShape()->setTexture(&m_texture);
 	}
 
 	void RenderComponent::Update(MsTime deltaTime)
 	{
-		if (m_Transform)
-		{
-			m_Sprite.setPosition(m_Transform->GetPosition());
-			m_Sprite.setRotation(m_Transform->GetRotation());
-			m_Sprite.setScale(m_Transform->GetScale());
-		}
 	}
 
 	void RenderComponent::Draw(sf::RenderWindow& window) const
 	{
-		window.draw(m_Sprite);
-	}
-
-	sf::Sprite& RenderComponent::GetSprite()
-	{
-		return m_Sprite;
-	}
-
-	const sf::Sprite& RenderComponent::GetSprite() const
-	{
-		return m_Sprite;
+		window.draw(*m_transform->GetShape());
+		if (m_effect)
+		{
+			m_effect->Draw(window);
+		}
 	}
 }

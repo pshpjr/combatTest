@@ -13,7 +13,7 @@ Description:
 #include <string>
 #include <unordered_map>
 
-namespace psh::Component
+namespace psh::component
 {
 	/**
 * \brief 컴포넌트마다 고유 ID를 발급하기 위한 클래스.

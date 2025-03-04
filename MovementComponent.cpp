@@ -37,15 +37,15 @@ bool approximatelyEqual(sf::Vector2f v1, sf::Vector2f v2, float relEpsilon = 1e-
 	return diff <= maxMagnitude * relEpsilon;
 }
 
-psh::Component::MovementComponent::MovementComponent()
+psh::component::MovementComponent::MovementComponent()
 {
 }
 
-psh::Component::MovementComponent::~MovementComponent()
+psh::component::MovementComponent::~MovementComponent()
 {
 }
 
-void psh::Component::MovementComponent::Update(MsTime deltaTime)
+void psh::component::MovementComponent::Update(MsTime deltaTime)
 {
 	if (!m_isMove)
 	{
@@ -70,7 +70,7 @@ void psh::Component::MovementComponent::Update(MsTime deltaTime)
 	m_transform->SetPosition({position.x + dx, position.y + dy});
 }
 
-void psh::Component::MovementComponent::Move(sf::Vector2f destination)
+void psh::component::MovementComponent::Move(sf::Vector2f destination)
 {
 	m_destination = destination;
 	m_isMove = true;
@@ -82,32 +82,32 @@ void psh::Component::MovementComponent::Move(sf::Vector2f destination)
 	m_transform->SetRotation(sf::radians(radian));
 }
 
-void psh::Component::MovementComponent::Stop()
+void psh::component::MovementComponent::Stop()
 {
 	m_isMove = false;
 }
 
-void psh::Component::MovementComponent::SetSpeed(float speed)
+void psh::component::MovementComponent::SetSpeed(float speed)
 {
 	m_moveSpeedMs = speed;
 }
 
-float psh::Component::MovementComponent::GetSpeed() const
+float psh::component::MovementComponent::GetSpeed() const
 {
 	return m_moveSpeedMs;
 }
 
-bool psh::Component::MovementComponent::IsMoving() const
+bool psh::component::MovementComponent::IsMoving() const
 {
 	return m_isMove;
 }
 
-sf::Vector2f psh::Component::MovementComponent::GetDestination() const
+sf::Vector2f psh::component::MovementComponent::GetDestination() const
 {
 	return m_destination;
 }
 
-void psh::Component::MovementComponent::Initialize()
+void psh::component::MovementComponent::Initialize()
 {
 	m_transform = GetOwner()->GetRequiredComponent<TransformComponent>();
 	m_destination = m_transform->GetPosition();

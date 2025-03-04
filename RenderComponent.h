@@ -4,15 +4,17 @@
 
 #include "Component.h"
 
+
 namespace sf
 {
 	class RenderWindow;
 }
 
 
-namespace psh::Component
+namespace psh::component
 {
 	class TransformComponent;
+	class EffectComponent;
 
 	class RenderComponent : public Component
 	{
@@ -25,14 +27,10 @@ namespace psh::Component
 
 		void Draw(sf::RenderWindow& window) const;
 
-		sf::Sprite& GetSprite();
-
-		const sf::Sprite& GetSprite() const;
-
 	private:
-		sf::Texture m_Texture;
-		sf::Sprite m_Sprite;
-		TransformComponent* m_Transform;
+		sf::Texture m_texture;
+		TransformComponent* m_transform{nullptr};
+		EffectComponent* m_effect{nullptr};
 		COMPONENT_DEFINE("Render")
 	};
 }
