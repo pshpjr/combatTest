@@ -1,5 +1,5 @@
 #pragma comment(lib,"Winmm.lib")
-
+#pragma comment(lib, "chipmunk_d.lib")
 #include <SFML/Audio.hpp>
 #include "GameManager.h"
 

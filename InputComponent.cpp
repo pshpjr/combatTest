@@ -10,7 +10,7 @@
 #include "MovementComponent.h"
 #include "TransformComponent.h"
 
-namespace psh::Component
+namespace psh::component
 {
 	void InputComponent::Initialize()
 	{

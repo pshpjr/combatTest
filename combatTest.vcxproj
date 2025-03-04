@@ -135,19 +135,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AIComponent.cpp" />
+    <ClCompile Include="AttackComponent.cpp" />
+    <ClCompile Include="CollisionComponent.cpp" />
+    <ClCompile Include="EffectComponent.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MovementComponent.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
+    <ClCompile Include="Skill.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AIComponent.h" />
+    <ClInclude Include="AttackComponent.h" />
+    <ClInclude Include="CollisionComponent.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ComponentTypeRegistry.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Duration.h" />
+    <ClInclude Include="EffectComponent.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="EventTypes.h" />
     <ClInclude Include="GameManager.h" />
@@ -155,6 +164,7 @@
     <ClInclude Include="InputComponent.h" />
     <ClInclude Include="MovementComponent.h" />
     <ClInclude Include="RenderComponent.h" />
+    <ClInclude Include="Skill.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="Utils.h" />

@@ -111,46 +111,32 @@ class IntervalTimer
 /**
  * \brief 1회성 시간 만료를 확인하는 타이머
  */
-struct TimeTracker
+struct Timer
 {
-	TimeTracker(int32 expiry = 0) : m_expiryTime(expiry)
+	Timer(MsTime expiry = 0) : m_expiryTime(expiry)
 	{
 	}
 
-	TimeTracker(Milliseconds expiry) : m_expiryTime(expiry)
+	void Update(MsTime diff)
 	{
-	}
-
-	void Update(int32 diff)
-	{
-		Update(Milliseconds(diff));
-	}
-
-	void Update(Milliseconds diff)
-	{
-		m_expiryTime -= diff;
+		m_expiryTime = m_expiryTime <= diff ? 0 : m_expiryTime - diff;
 	}
 
 	[[nodiscard]] bool Passed() const
 	{
-		return m_expiryTime <= 0s;
+		return m_expiryTime == 0;
 	}
 
-	void Reset(int32 expiry)
-	{
-		Reset(Milliseconds(expiry));
-	}
-
-	void Reset(Milliseconds expiry)
+	void Reset(MsTime expiry)
 	{
 		m_expiryTime = expiry;
 	}
 
-	[[nodiscard]] Milliseconds GetExpiry() const
+	[[nodiscard]] MsTime GetRemain() const
 	{
 		return m_expiryTime;
 	}
 
 private:
-	Milliseconds m_expiryTime;
+	MsTime m_expiryTime;
 };

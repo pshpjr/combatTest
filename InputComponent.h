@@ -3,7 +3,7 @@
 #include "Define.h"
 #include "GameManager.h"
 
-namespace psh::Component
+namespace psh::component
 {
 	class MovementComponent;
 }
@@ -17,7 +17,7 @@ namespace psh
 {
 	enum class InputEvent : uint8;
 
-	namespace Component
+	namespace component
 	{
 		class TransformComponent;
 

@@ -40,6 +40,21 @@
     <ClCompile Include="MovementComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
+    <ClCompile Include="AIComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Skill.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameManager.h">
@@ -82,6 +97,21 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="MovementComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="AIComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Skill.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
   </ItemGroup>

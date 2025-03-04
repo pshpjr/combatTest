@@ -25,7 +25,7 @@ namespace psh
 		template <typename T, typename... Args>
 		T* AddComponent(Args&&... args)
 		{
-			static_assert(std::is_base_of_v<Component::Component, T>, "T must derive from Component");
+			static_assert(std::is_base_of_v<component::Component, T>, "T must derive from component");
 
 			auto component = std::make_unique<T>(std::forward<Args>(args)...);
 			component->SetOwner(this);
@@ -38,7 +38,7 @@ namespace psh
 		template <typename T>
 		T* GetComponent()
 		{
-			static_assert(std::is_base_of_v<Component::Component, T>, "T must derive from Component");
+			static_assert(std::is_base_of_v<component::Component, T>, "T must derive from component");
 
 			for (const auto& component : m_components)
 			{
@@ -74,6 +74,6 @@ namespace psh
 
 	private:
 		GUID m_name;
-		std::vector<std::unique_ptr<Component::Component>> m_components;
+		std::vector<std::unique_ptr<component::Component>> m_components;
 	};
 }
